@@ -1,0 +1,3 @@
+# Optional by architecture decision D2. Install only after the core API is healthy.
+paddleocr
+paddlepaddle

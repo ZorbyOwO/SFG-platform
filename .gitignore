@@ -6,3 +6,20 @@ uploads/SKILL.md
 # Temporary QA captures
 qa-*.png
 qa-*.jpg
+
+# Generated frontend/backend artifacts and local secrets
+node_modules/
+web/dist/
+web/.vite/
+web/.env.local
+*.tsbuildinfo
+api/.env
+api/.runtime/
+api/models/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+.DS_Store
