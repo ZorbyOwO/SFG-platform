@@ -1,0 +1,8 @@
+# Local editor and agent tooling
+.thumbnail
+.agents/
+uploads/SKILL.md
+
+# Temporary QA captures
+qa-*.png
+qa-*.jpg
