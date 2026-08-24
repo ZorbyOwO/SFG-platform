@@ -26,13 +26,13 @@ This file is the required change record and handoff reference for SFG developers
 
 ## Changes
 
-### 2026-08-24 10:02:34 MYT — IN PROGRESS
+### 2026-08-24 10:02:34 MYT — COMPLETED
 
 - Type: Update
-- Scope: Vercel preview deployment for the citizen web frontend
-- Summary: Added a Vercel SPA rewrite for React Router deep links and explicit upload exclusions for local environment, link-state, build-output, and dependency folders. The deployment targets only `web/`; the FastAPI/CoreCV trusted tier, local encrypted biometric storage, model payloads, and runtime credentials remain outside Vercel. With no Vercel build variables configured, the preview uses the application's explicitly labelled mock adapter rather than claiming that the trusted biometric or Supabase backend is deployed.
+- Scope: Vercel deployment for the citizen web frontend
+- Summary: Added a Vercel SPA rewrite for React Router deep links and explicit upload exclusions for local environment, link-state, build-output, and dependency folders. Created the separate Vercel project `sfg-platform`, configured it for Vite with `npm run build` and `dist`, and deployed the clean `web/` tree from commit `44ba73a`. Vercel automatically assigned the project's first deployment to production at `https://sfg-platform-azure.vercel.app`. The FastAPI/CoreCV trusted tier, local encrypted biometric storage, model payloads, and runtime credentials remain outside Vercel. With no Vercel build variables configured, the deployed frontend uses the application's explicitly labelled mock adapter rather than claiming that the trusted biometric or Supabase backend is deployed.
 - Files: `.gitignore`, `web/.gitignore`, `web/.vercelignore`, `web/vercel.json`, `CHANGELOGS.md`
-- Validation: Frontend tests and production build passed before deployment; Vercel preview creation and HTTP/deep-link verification are in progress.
+- Validation: Frontend tests passed `4/4`; the Vite production build passed with the existing non-failing >500 kB chunk warning. Vercel dry-run excluded `.env.local`, `.vercel/`, dependency/build output, and TypeScript build info. Deployment `dpl_J2dvxy5Z1inafSV4rBWh9VyNMWQM` reached `Ready`; HTTP checks returned `200 text/html` for `/`, `/platform`, and `/login`, confirming the React Router rewrite. No FastAPI secret, biometric key/database, model payload, or raw biometric material was included.
 
 ### 2026-08-24 09:08:51 MYT — COMPLETED
 
