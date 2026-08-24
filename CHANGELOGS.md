@@ -26,6 +26,14 @@ This file is the required change record and handoff reference for SFG developers
 
 ## Changes
 
+### 2026-08-24 10:02:34 MYT — IN PROGRESS
+
+- Type: Update
+- Scope: Vercel preview deployment for the citizen web frontend
+- Summary: Added a Vercel SPA rewrite for React Router deep links and explicit upload exclusions for local environment, link-state, build-output, and dependency folders. The deployment targets only `web/`; the FastAPI/CoreCV trusted tier, local encrypted biometric storage, model payloads, and runtime credentials remain outside Vercel. With no Vercel build variables configured, the preview uses the application's explicitly labelled mock adapter rather than claiming that the trusted biometric or Supabase backend is deployed.
+- Files: `.gitignore`, `web/.vercelignore`, `web/vercel.json`, `CHANGELOGS.md`
+- Validation: Frontend tests and production build passed before deployment; Vercel preview creation and HTTP/deep-link verification are in progress.
+
 ### 2026-08-24 09:08:51 MYT — COMPLETED
 
 - Type: Feature
