@@ -74,18 +74,30 @@ if (page === "scan" && requireSetup()) {
   navigator.mediaDevices?.getUserMedia({ video: { facingMode: "user" }, audio: false }).then((active) => {
     stream = active; video.srcObject = active;
   }).catch(() => showError("Camera permission is required. Check browser settings and try again."));
-  document.getElementById("capture").addEventListener("click", async () => {
+  const captureButton = document.getElementById("capture");
+  captureButton.addEventListener("click", async () => {
     if (!stream || !video.videoWidth) return showError("Wait for the camera preview before capturing.");
+    captureButton.disabled = true;
     const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-    canvas.getContext("2d").drawImage(video, 0, 0);
+    const scale = Math.min(1, 960 / Math.max(video.videoWidth, video.videoHeight));
+    canvas.width = Math.max(1, Math.round(video.videoWidth * scale));
+    canvas.height = Math.max(1, Math.round(video.videoHeight * scale));
+    canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.86));
     canvas.width = 1; canvas.height = 1;
-    if (!blob) return showError("The camera frame could not be prepared.");
+    if (!blob) { captureButton.disabled = false; return showError("The camera frame could not be prepared."); }
     const form = new FormData();
     form.set("session_id", current.session_id); form.set("nonce", current.nonce); form.set("frame", blob, "capture.jpg");
     try {
-      const result = await api("/pay/identify", { method: "POST", headers: { "X-SFG-Simulation": "success" }, body: form });
+      const result = await api("/pay/identify", { method: "POST", body: form });
+      if (result.capture_status !== "CAPTURE_READY") {
+        captureButton.disabled = false;
+        return showError(result.capture_status === "NO_FACE" ? "No face was detected. Keep one face inside the guide and try again." : "The face capture was not ready. Adjust your position and try again.");
+      }
+      if (result.match_status !== "MATCH_CONFIRMED" || result.identity_confirmation_status !== "IDENTITY_CONFIRMATION_REQUIRED") {
+        stopCamera();
+        return showError("No safe identity match was confirmed. Cancel and start a new payment.");
+      }
       stopCamera();
       sessionStorage.setItem("sfg_identification", JSON.stringify(result));
       window.location.assign("confirm.html");
@@ -104,9 +116,36 @@ if (page === "confirm" && requireSetup()) {
   const current = payment();
   const identity = JSON.parse(sessionStorage.getItem("sfg_identification") || "null");
   if (!current || !identity) window.location.replace("amount.html");
+  if (identity?.identity_confirmation_status !== "IDENTITY_CONFIRMATION_REQUIRED") window.location.replace("amount.html");
   document.getElementById("identity").textContent = identity?.citizen_display_name || "Matched customer";
   document.getElementById("masked-ic").textContent = identity?.masked_ic || "Masked identity";
   document.getElementById("confirm-amount").value = `MYR ${identity?.amount || "0.00"}`;
+  const prompt = document.getElementById("identity-prompt");
+  const form = document.getElementById("confirm-form");
+  const yesButton = document.getElementById("confirm-yes");
+  const noButton = document.getElementById("confirm-no");
+  const confirmProposedIdentity = async (confirmed) => {
+    yesButton.disabled = true; noButton.disabled = true;
+    try {
+      await api("/pay/identity/confirm", {
+        method: "POST",
+        body: JSON.stringify({ session_id: current.session_id, nonce: current.nonce, confirmed }),
+      });
+      if (confirmed) {
+        prompt.hidden = true;
+        form.hidden = false;
+        document.getElementById("pin").focus();
+      } else {
+        clearPayment();
+        window.location.assign("amount.html");
+      }
+    } catch (error) {
+      yesButton.disabled = false; noButton.disabled = false;
+      showError(error.message);
+    }
+  };
+  yesButton.addEventListener("click", () => confirmProposedIdentity(true));
+  noButton.addEventListener("click", () => confirmProposedIdentity(false));
   document.getElementById("confirm-form").addEventListener("submit", async (event) => {
     event.preventDefault();
     const pinInput = document.getElementById("pin");

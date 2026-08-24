@@ -1,1 +1,29 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Enter amount · SFG Kiosk</title><link rel="stylesheet" href="../shared/css/base.css"></head><body data-page="amount"><div class="kiosk-shell"><header class="kiosk-header"><div class="kiosk-brand"><span>SFG</span><span>Sarawak Facial Gateway</span></div><div class="kiosk-status">Sarawak Mart Kuching</div></header><main class="kiosk-main"><h1>Enter amount</h1><p>Confirm the amount before asking the customer to face the camera.</p><form id="amount-form" class="kiosk-card"><label>Purchase amount (MYR)<input id="amount" class="amount-input" inputmode="decimal" placeholder="0.00" required></label><button class="kiosk-button full">Start payment</button><div id="error" class="error" hidden></div></form></main><footer class="kiosk-footer">No real money or payment gateway is connected.</footer></div><script type="module" src="js/kiosk.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Enter amount · SFG Kiosk</title>
+  <link rel="stylesheet" href="../shared/css/base.css">
+  <link rel="stylesheet" href="css/kiosk.css">
+</head>
+<body data-page="amount">
+  <div class="kiosk-shell">
+    <header class="kiosk-header">
+      <div class="kiosk-brand"><span>SFG</span><span>Sarawak Facial Gateway</span></div>
+      <div class="kiosk-status">Sarawak Mart Kuching</div>
+    </header>
+    <main class="kiosk-main">
+      <h1>Enter amount</h1>
+      <p>Confirm the purchase price before asking the customer to face the camera.</p>
+      <form id="amount-form" class="kiosk-card">
+        <label>Purchase amount (MYR)<input id="amount" class="amount-input" inputmode="decimal" placeholder="0.00" required></label>
+        <button class="kiosk-button full">Start payment</button>
+        <div id="error" class="error" hidden></div>
+      </form>
+    </main>
+    <footer class="kiosk-footer">This deducts the POC Supabase wallet only. No bank, card, or settlement gateway is connected.</footer>
+  </div>
+  <script type="module" src="js/kiosk.js"></script>
+</body>
+</html>

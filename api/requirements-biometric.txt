@@ -1,0 +1,19 @@
+# Trusted-tier face recognition runtime for registration and re-enrolment.
+#
+# These pins are the exact versions from the frozen mother lock at
+# biometric/internal/biometric-core/requirements-biometric-core.lock.txt.
+# opencv-python 4.10.0.84 ships as a cp37-abi3 wheel, so the binary is identical
+# to the one the Core v1 human validation gate ran against. Keeping these three
+# pins byte-exact is what preserves the compatibility fingerprint a18bbbd47a57d14d.
+#
+# Do not bump these without re-running the mother test suite and re-checking the
+# fingerprint; a changed OpenCV runtime invalidates every stored template.
+--index-url https://pypi.org/simple
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+numpy==2.2.6
+opencv-python==4.10.0.84
+torch==2.6.0+cpu
+
+# AES-GCM sealing for templates at rest in the trusted tier.
+cryptography==46.0.3

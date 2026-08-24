@@ -1,0 +1,338 @@
+/* ============================================================
+   Hero. Mobile first: one column, visual above the fold beside
+   the copy only once there is room for both.
+   ============================================================ */
+
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100svh;
+  padding-top: calc(var(--nav-h) + env(safe-area-inset-top) + 12px);
+  padding-bottom: 64px;
+  overflow: clip;
+}
+
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(20px, 4vw, 48px);
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero__h1 {
+  font-size: var(--text-hero);
+  text-transform: uppercase;
+  letter-spacing: -0.015em;
+  margin-top: var(--space-2);
+  max-width: 14ch;
+}
+.hero__h1 em {
+  font-style: normal;
+  color: var(--red);
+  display: inline-block;
+}
+
+.hero__sub {
+  margin-top: var(--space-3);
+  max-width: 50ch;
+  color: var(--ink-soft);
+  font-size: clamp(1rem, 0.94rem + 0.4vw, 1.15rem);
+}
+
+.hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: var(--space-3);
+}
+.hero__ctas .btn {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+@media (min-width: 480px) {
+  .hero__ctas .btn {
+    flex: 0 0 auto;
+  }
+}
+
+.hero__proof {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: var(--space-3);
+}
+.hero__proof li {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  padding: 6px 12px;
+  background: var(--paper-2);
+}
+
+/* --- the artwork stage --- */
+
+.hero__visual {
+  position: relative;
+  order: -1;
+  margin-inline: auto;
+  width: min(100%, 380px);
+}
+
+/*
+  The stage carries the artwork's own aspect ratio, so its box is reserved
+  before the image decodes and nothing shifts on load. `contain` guarantees the
+  art is letterboxed rather than cropped at any ratio the stage ends up with,
+  so it can never spill past the frame.
+*/
+.hero__stage {
+  /*
+    Height is capped by --cap, but the cap is applied to the *width* and the
+    height is left to the aspect ratio. Capping the height directly would
+    letterbox the art inside a wider box and leave the viewfinder brackets
+    floating away from it; this way the frame always hugs the picture, and the
+    picture can never outgrow either its column or the viewport.
+  */
+  --cap: 76svh;
+  position: relative;
+  aspect-ratio: var(--art, 964 / 1232);
+  width: min(100%, calc(var(--cap) * 0.7825));
+  margin-inline: auto;
+}
+
+.hero__art {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/*
+  The source art is keyed to transparency, so it sits on the page ground
+  rather than on a white tile of its own. This soft pool underneath keeps it
+  from floating.
+*/
+.hero__stage::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 2%;
+  translate: -50% 0;
+  width: 62%;
+  height: 7%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(29, 26, 22, 0.13), transparent 70%);
+  z-index: -1;
+}
+
+/* Scan sweep: the brand motif, now pure CSS over the artwork. */
+.hero__sweep {
+  position: absolute;
+  inset-inline: 4%;
+  top: 0;
+  height: 12%;
+  pointer-events: none;
+  border-bottom: 2px solid var(--red);
+  background: linear-gradient(180deg, rgba(200, 16, 46, 0) 0%, rgba(200, 16, 46, 0.14) 100%);
+  opacity: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero__sweep {
+    animation: hero-sweep 6.2s var(--ease-out) infinite;
+  }
+}
+@keyframes hero-sweep {
+  0%,
+  6% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  14% {
+    opacity: 1;
+  }
+  56% {
+    transform: translateY(740%);
+    opacity: 1;
+  }
+  70%,
+  100% {
+    transform: translateY(740%);
+    opacity: 0;
+  }
+}
+
+/* viewfinder brackets: a camera HUD around the subject */
+.vf {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(200, 16, 46, 0.5);
+  border-radius: 2px;
+}
+.vf--tl {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+.vf--tr {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+}
+.vf--bl {
+  bottom: 0;
+  left: 0;
+  border-right: none;
+  border-top: none;
+}
+.vf--br {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+.hero__readout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.hero__readout span + span::before {
+  content: '\00b7';
+  margin-right: 12px;
+  color: var(--line-strong);
+}
+.hero__rec {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--red);
+  animation: sfg-blink 1.6s steps(2, end) infinite;
+  flex-shrink: 0;
+}
+@keyframes sfg-blink {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.hero__scrollcue {
+  position: absolute;
+  bottom: max(14px, env(safe-area-inset-bottom));
+  left: 50%;
+  translate: -50% 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--ink-faint);
+  animation: sfg-cue 2.2s ease-in-out infinite;
+}
+@keyframes sfg-cue {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+/* --- larger phones and up: give the stage more room --- */
+@media (min-width: 560px) {
+  .hero__visual {
+    width: min(100%, 430px);
+  }
+}
+
+/* --- two columns once the copy has a comfortable measure --- */
+@media (min-width: 900px) {
+  .hero__grid {
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+  }
+  .hero__visual {
+    order: 0;
+    width: 100%;
+  }
+  .hero__stage {
+    --cap: min(66vh, 560px);
+  }
+  .vf {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* --- short landscape: compress everything, the fold is only ~360px --- */
+@media (max-height: 560px) and (orientation: landscape) {
+  .hero {
+    min-height: auto;
+    padding-top: calc(var(--nav-h) + 12px);
+    padding-bottom: 24px;
+  }
+  .hero__h1 {
+    font-size: clamp(1.5rem, 4vw, 2.3rem);
+    margin-top: 6px;
+  }
+  .hero__sub {
+    margin-top: 10px;
+    font-size: 0.94rem;
+    /* Keep the promise, drop the tail: there is no vertical room here. */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .hero__ctas {
+    margin-top: 12px;
+  }
+  .hero__readout {
+    display: none;
+  }
+  .hero__grid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: center;
+  }
+  .hero__visual {
+    order: 0;
+    width: 100%;
+  }
+  /* Short landscape: the height cap does the work, width follows it. */
+  .hero__stage {
+    --cap: 82svh;
+  }
+  .hero__scrollcue {
+    display: none;
+  }
+  .hero__proof {
+    display: none;
+  }
+}
+
+/* Very small screens: the stage gives way to the message. */
+@media (max-width: 360px) {
+  .hero__visual {
+    width: 250px;
+  }
+  .hero__proof li {
+    font-size: 0.68rem;
+  }
+}

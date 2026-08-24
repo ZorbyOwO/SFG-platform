@@ -1,1 +1,33 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Receipt · SFG Kiosk</title><link rel="stylesheet" href="../shared/css/base.css"></head><body data-page="receipt"><div class="kiosk-shell"><header class="kiosk-header"><div class="kiosk-brand"><span>SFG</span><span>Sarawak Facial Gateway</span></div><div class="kiosk-status">Payment result</div></header><main class="kiosk-main"><div class="receipt-mark" aria-label="Success">OK</div><h1>Payment complete</h1><p>The development wallet was charged once and the server generated the completion time.</p><div class="receipt-grid"><div><span>Reference</span><strong id="reference"></strong></div><div><span>Amount</span><strong id="receipt-amount"></strong></div><div><span>Merchant</span><strong id="merchant"></strong></div><div><span>Completed</span><strong id="completed"></strong></div><div><span>Balance after</span><strong id="balance"></strong></div></div><a class="kiosk-button" href="amount.html">New payment</a></main><footer class="kiosk-footer">Development transaction only. No real bank, settlement, or government service is connected.</footer></div><script type="module" src="js/kiosk.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Receipt · SFG Kiosk</title>
+  <link rel="stylesheet" href="../shared/css/base.css">
+  <link rel="stylesheet" href="css/kiosk.css">
+</head>
+<body data-page="receipt">
+  <div class="kiosk-shell">
+    <header class="kiosk-header">
+      <div class="kiosk-brand"><span>SFG</span><span>Sarawak Facial Gateway</span></div>
+      <div class="kiosk-status">Payment result</div>
+    </header>
+    <main class="kiosk-main">
+      <div class="receipt-mark" aria-label="Success">OK</div>
+      <h1>Payment complete</h1>
+      <p>The matched citizen's Supabase main wallet was charged once by the trusted server.</p>
+      <div class="receipt-grid">
+        <div><span>Reference</span><strong id="reference"></strong></div>
+        <div><span>Amount</span><strong id="receipt-amount"></strong></div>
+        <div><span>Merchant</span><strong id="merchant"></strong></div>
+        <div><span>Completed</span><strong id="completed"></strong></div>
+        <div><span>Balance after</span><strong id="balance"></strong></div>
+      </div>
+      <a class="kiosk-button" href="amount.html">New payment</a>
+    </main>
+    <footer class="kiosk-footer">POC wallet transaction only. No bank, settlement, or government identity service is connected.</footer>
+  </div>
+  <script type="module" src="js/kiosk.js"></script>
+</body>
+</html>

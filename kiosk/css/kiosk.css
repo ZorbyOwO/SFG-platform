@@ -1,0 +1,45 @@
+.kiosk-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.poc-notice {
+  margin-bottom: 22px;
+  padding: 12px 14px;
+  border: 1px solid #fed7aa;
+  border-radius: 9px;
+  background: #fff7ed;
+  color: #9a3412;
+  font-size: 0.8rem;
+  font-weight: 650;
+  text-align: left;
+}
+
+.action-gap {
+  margin-top: 10px;
+}
+
+.readonly-label {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+  font-weight: 700;
+}
+
+.confirmation-question,
+.confirmed-note {
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.confirmation-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .confirmation-actions {
+    grid-template-columns: 1fr;
+  }
+}

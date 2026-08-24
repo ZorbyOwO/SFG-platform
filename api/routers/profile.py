@@ -27,12 +27,15 @@ async def update_profile(payload: ProfilePatchRequest, user: User = Depends(curr
 
 @router.post("/face-reenrol/session")
 async def start_reenrol(request: Request, user: User = Depends(current_user)) -> dict[str, object]:
+    if user.profile_state != "active" or not user.pin_hash:
+        raise ApiError(409, "profile_not_ready_for_reenrolment", "Finish account activation before re-enrolling your face.")
     templates: TemplateRepository = request.app.state.template_repository
     await templates.revoke_subject(user.citizen_id)
     user.templates_stored = 0
     user.profile_state = "pending_face"
     user.enrolment_status = EnrolmentStatus.STARTED
-    user.consent_status = ConsentStatus.REQUIRED
+    # The client presents and records renewed consent immediately before this call.
+    user.consent_status = ConsentStatus.GRANTED
     session = get_store(request).create_session("enrol", user_id=user.citizen_id)
     return {**session_dto(session), "enrolment_status": user.enrolment_status.value}
 

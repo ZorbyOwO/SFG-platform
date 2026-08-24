@@ -1,3 +1,7 @@
+/*
+ * ARCHIVED 2026-08-24: RETIRED PROTOTYPE RUNTIME, NOT PART OF THE RUNNING SYSTEM.
+ * Used only by ./SFG Prototype.dc.html (kept together in this folder).
+ */
 // GENERATED from dc-runtime/src/*.ts — do not edit. Rebuild with `cd dc-runtime && bun run build`.
 "use strict";
 (() => {

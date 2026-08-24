@@ -141,6 +141,11 @@ class PayConfirmRequest(SessionRequest, PinRequest):
     nonce: str
 
 
+class PayIdentityConfirmRequest(SessionRequest):
+    nonce: str
+    confirmed: bool
+
+
 class TopUpRequest(StrictDto):
     amount: Decimal
     mock_source: str = Field(min_length=1, max_length=60)
@@ -148,10 +153,15 @@ class TopUpRequest(StrictDto):
 
     @field_validator("amount")
     @classmethod
-    def fixed_denomination(cls, value: Decimal) -> Decimal:
-        if value not in {Decimal("10"), Decimal("20"), Decimal("50"), Decimal("100")}:
-            raise ValueError("invalid_denomination")
-        return value
+    def valid_top_up_amount(cls, value: Decimal) -> Decimal:
+        if (
+            not value.is_finite()
+            or value < Decimal("1.00")
+            or value > Decimal("5000.00")
+            or value.as_tuple().exponent < -2
+        ):
+            raise ValueError("invalid_amount")
+        return value.quantize(Decimal("0.01"))
 
 
 class TransferRequest(StrictDto):

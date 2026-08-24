@@ -25,9 +25,10 @@ export function Login() {
     </aside>
     <section className="auth-form-panel">
       <form className="auth-form" onSubmit={submit}>
-        <Link className="back-link" to="/">Back to welcome</Link>
+        <Link className="back-link" to="/platform">Back to platform</Link>
         <p className="eyebrow">Welcome back</p><h1>Log in</h1><p className="form-intro">Enter your registered IC number and password.</p>
         {services.mode === "mock" && <div className="simulation-banner" role="status">Simulation mode: any valid 12-digit IC and non-empty password will continue.</div>}
+        {services.mode === "supabase" && <div className="simulation-banner" role="status">Secure login is connected to Supabase. IC numbers are unverified prototype identifiers.</div>}
         <label>IC number<input inputMode="numeric" autoComplete="username" placeholder="000000-00-0000" value={ic} onChange={(e) => setIc(e.target.value)} required /></label>
         <label>Password<div className="password-field"><input type={show ? "text" : "password"} autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required /><button type="button" onClick={() => setShow((value) => !value)}>{show ? "Hide" : "Show"}</button></div></label>
         {error && <div className="form-error" role="alert">{error}</div>}

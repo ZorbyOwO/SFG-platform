@@ -45,6 +45,8 @@ export const apiServices: AppServices = {
       accessToken = ""; refreshToken = "";
     },
     hasSession: () => Boolean(accessToken),
+    async restoreSession() { return Boolean(accessToken); },
+    async getAccessToken() { return accessToken || null; },
   },
   biometric: {
     startEnrollment() {
@@ -87,9 +89,50 @@ export const apiServices: AppServices = {
     createFamilyMember(input) {
       return request<FamilyMemberDto>("/family-members", { method: "POST", body: JSON.stringify(input) });
     },
+    startEnrollment(familyMemberId) {
+      return request<EnrollmentSessionDto>(`/family-members/${encodeURIComponent(familyMemberId)}/enrol/session`, { method: "POST", body: "{}" });
+    },
+    capturePosition(familyMemberId, session, pose) {
+      const form = new FormData();
+      form.set("session_id", session.session_id);
+      form.set("nonce", session.nonce);
+      form.set("pose", pose);
+      form.set("frame", simulationFrame(), "development-simulation.jpg");
+      return request<CaptureDto>(`/family-members/${encodeURIComponent(familyMemberId)}/enrol/face`, {
+        method: "POST",
+        headers: { "X-SFG-Simulation": "success" },
+        body: form,
+      });
+    },
+    completeEnrollment(familyMemberId, sessionId) {
+      return request<void>(`/family-members/${encodeURIComponent(familyMemberId)}/enrol/complete`, {
+        method: "POST",
+        body: JSON.stringify({ session_id: sessionId }),
+      });
+    },
   },
   profile: {
     getProfile: () => request("/profile"),
+    changePassword(currentPassword, newPassword, newPasswordConfirm) {
+      return request<void>("/auth/password/change", { method: "POST", body: JSON.stringify({
+        current_password: currentPassword,
+        new_password: newPassword,
+        new_password_confirm: newPasswordConfirm,
+      }) });
+    },
+    changePin(currentPin, newPin, newPinConfirm) {
+      return request<void>("/auth/pin/change", { method: "POST", body: JSON.stringify({
+        current_pin: currentPin,
+        new_pin: newPin,
+        new_pin_confirm: newPinConfirm,
+      }) });
+    },
+    startFaceReenrollment() {
+      return request<EnrollmentSessionDto>("/profile/face-reenrol/session", { method: "POST", body: "{}" });
+    },
+    completeFaceReenrollment(sessionId) {
+      return request<void>("/enrol/complete", { method: "POST", body: JSON.stringify({ session_id: sessionId }) });
+    },
   },
 };
 

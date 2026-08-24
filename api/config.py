@@ -57,6 +57,13 @@ class Settings:
     enrol_frames_required: int
     enrol_required_positions: tuple[str, ...]
     kiosk_key_file: Path
+    corecv_root: Path
+    biometric_key_file: Path
+    biometric_template_db: Path
+    enrol_session_timeout_seconds: int
+    supabase_url: str | None
+    supabase_publishable_key: str | None
+    supabase_backend_secret: str | None
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -110,4 +117,13 @@ class Settings:
             enrol_frames_required=int(os.getenv("ENROL_FRAMES_REQUIRED", "3")),
             enrol_required_positions=positions,
             kiosk_key_file=ROOT / ".runtime" / "kiosk.key",
+            corecv_root=Path(os.getenv("CORECV_ROOT") or (ROOT.parent / "biometric")),
+            biometric_key_file=ROOT / ".runtime" / "biometric-template.key",
+            biometric_template_db=Path(
+                os.getenv("BIOMETRIC_TEMPLATE_DB") or (ROOT / ".runtime" / "biometric" / "templates.sqlite3")
+            ),
+            enrol_session_timeout_seconds=int(os.getenv("ENROL_SESSION_TIMEOUT_SECONDS", "900")),
+            supabase_url=os.getenv("SUPABASE_URL") or None,
+            supabase_publishable_key=os.getenv("SUPABASE_PUBLISHABLE_KEY") or None,
+            supabase_backend_secret=os.getenv("SUPABASE_BACKEND_SECRET") or None,
         )

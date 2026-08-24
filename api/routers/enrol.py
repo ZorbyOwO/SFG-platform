@@ -89,12 +89,17 @@ async def complete_session(payload: SessionRequest, request: Request, user: User
         raise ApiError(422, "insufficient_templates", "Complete every required capture position.")
     session.status = "consumed"
     user.templates_stored = len(session.positions)
-    user.profile_state = "pending_pin"
+    # A re-enrolling citizen already has a valid PIN. Keep it and restore the
+    # active account after the replacement face capture; first-time enrolment
+    # still continues to PIN setup.
+    is_reenrolment = user.pin_hash is not None
+    user.profile_state = "active" if is_reenrolment else "pending_pin"
+    user.enrolment_status = EnrolmentStatus.COMPLETED if is_reenrolment else EnrolmentStatus.STARTED
     return {
-        "enrolment_status": EnrolmentStatus.STARTED.value,
+        "enrolment_status": user.enrolment_status.value,
         "template_status": TemplateStatus.ACTIVE.value,
         "templates_stored": user.templates_stored,
-        "next_step": "set_pin",
+        "next_step": "dashboard" if is_reenrolment else "set_pin",
     }
 
 

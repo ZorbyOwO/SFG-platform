@@ -1,0 +1,27 @@
+{
+  "frozen_git_sha": "37bbbf64ecb79bb2d8598ea3c3a0243b33e7ef31",
+  "manifest_fingerprint": "a18bbbd47a57d14d",
+  "files": {
+    "BIOMETRIC_CORE_USAGE.md": "ebc1b9c5f95d735f35052a04e22f3ccf08b6903b28968fb963d9ca249d7adfa5",
+    "config/biometric-core.example.json": "a74758eacd0f4456bdae1187bc3d2ce6721effed6c7626dfdd4bf5358f30af0b",
+    "HUMAN_VALIDATION_REPORT.md": "28cf96503c5e958b0169d3d5facb78668b7c8e13ef7bcdca00cc9111ce3e9244",
+    "MODEL_MANIFEST.md": "2e5e9206f90ae84e3d703fb341b1ccb033c56c81e38834d7a9657d9dff3d4547",
+    "requirements-biometric-core.lock.txt": "0f8987a58017a2659e1b3b80228cae4d17209f293422e63d0803724a0e92bf2e",
+    "src/sfg_biometric_core/__init__.py": "e8890b1f1d0157365369870a70eaf02f1154bd71eb052f0823248874c7bf1fe3",
+    "src/sfg_biometric_core/compatibility.py": "63e2881275d23b9a3e29a3560c3815830b846b705f7bb08483c55f6b3d1dd5df",
+    "src/sfg_biometric_core/pipeline.py": "1e249214f0c93099247304a153d5b32e78e58ee8f2a00de79396db226ca09aeb",
+    "src/sfg_biometric_core/sface.py": "dea5b19cf1e54ddd72f5748891e04e3a145ab79245cdc9fa8041ef5454a17493",
+    "src/sfg_biometric_core/silent_face_pad.py": "173e14e031cfabe1039e9622851c7af9ec3aacdc5f745929327fb3f60a497e54",
+    "src/sfg_biometric_core/yunet.py": "af9b525323087eea1d117a6be3a191fe2496b6e127ed6a2e6b32e3c18f09cb53",
+    "tests/conftest.py": "18428c8ec29def69ac66fdbe51cbcb8833b7fee536d6f0e1d0494d961271a614",
+    "tests/test_manual_runner.py": "2d944c0ba11f0afe4abf64a9b667fe89ceeefa8fe4dab97c23755c02c5928015",
+    "tests/test_model_integration.py": "d48c2f06454f5e3f3faddc4037414d8dc6945492d6df787ab2896409aa845563",
+    "tests/test_pipeline_and_privacy.py": "24fda075ac5393376cc4a87406c033cc8f4e5366ff7ec1eb249eb2922e82e3c8",
+    "tests/test_pipeline_red.py": "0fa4ef3cf45419651adb6c54d258c8bc1083c5f39b24ec433a1efa1e108bbf57",
+    "tests/test_sface_and_matching.py": "37d6d258ce72ead3346a787dc0b115cb08e1f1faf386542b81317d296191235f",
+    "tests/test_silent_face_pad.py": "0cc751e7f5614695dba06ad7fa00ec1f568feeb99b54a66829bae2497a6b0f56",
+    "tests/test_yunet_and_compatibility.py": "e1b86ae224c731e8446d376217a53ddcbffc6294a119f166570796707c2992fb",
+    "THIRD_PARTY_NOTICES.md": "43bbd7ac84f10315f8c6c05177d3ffeb739afcee7984ce4305c1197d6f3fd36f",
+    "tools/manual_biometric_core_check.py": "f8e876740db2a62e99c56af8fee45c2059c7d4334016e1d26a7380cfc53806b5"
+  }
+}

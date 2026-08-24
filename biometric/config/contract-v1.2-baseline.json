@@ -1,0 +1,27 @@
+{
+  "contract_version": "1.2",
+  "shared_variables": [
+    "citizen_id", "citizen_display_name", "session_id", "correlation_id", "template_id",
+    "enrolment_status", "consent_status", "template_status", "capture_status", "liveness_status",
+    "match_status", "identity_confirmation_status", "pin_status", "authorization_status",
+    "service_access_status", "kiosk_id", "kiosk_name", "verification_completed_at",
+    "audit_event_id", "audit_event_type", "facial_template", "pin"
+  ],
+  "statuses": [
+    "ENROLMENT_STARTED", "ENROLMENT_COMPLETED", "ENROLMENT_FAILED", "ENROLMENT_CANCELLED",
+    "CONSENT_GRANTED", "CONSENT_WITHDRAWN", "CONSENT_REQUIRED", "TEMPLATE_ACTIVE",
+    "TEMPLATE_REVOKED", "CAPTURE_READY", "NO_FACE", "MULTIPLE_FACES", "INVALID_CAPTURE",
+    "CAMERA_ERROR", "PAD_LIVE", "PAD_REJECT", "PAD_UNCERTAIN", "PAD_ERROR",
+    "MATCH_CONFIRMED", "NO_MATCH", "AMBIGUOUS_MATCH", "MATCH_ERROR",
+    "IDENTITY_CONFIRMATION_REQUIRED", "IDENTITY_CONFIRMED", "IDENTITY_REJECTED",
+    "PIN_ACCEPTED", "PIN_REJECTED", "PIN_LOCKED", "AUTHORIZATION_GRANTED",
+    "AUTHORIZATION_DENIED", "SERVICE_ACCESS_GRANTED", "SERVICE_ACCESS_DENIED"
+  ],
+  "canonical_config_names": [
+    "APP_ENV", "API_BASE_URL", "PUBLIC_APP_URL", "CORS_ALLOWED_ORIGINS", "LOG_LEVEL",
+    "DATABASE_URL", "YUNET_MODEL_PATH", "SFACE_MODEL_PATH", "PAD_MODEL_DIR",
+    "SFACE_MATCH_THRESHOLD", "SFACE_AMBIGUITY_MARGIN", "PAD_ACCEPT_THRESHOLD",
+    "PAD_REJECT_THRESHOLD", "BIOMETRIC_TEMPLATE_ENCRYPTION_KEY", "PIN_MAX_ATTEMPTS",
+    "SESSION_TIMEOUT_SECONDS", "PADDLEOCR_LANG", "PADDLEOCR_MODEL_DIR"
+  ]
+}

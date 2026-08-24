@@ -36,6 +36,9 @@ let transactions: TransactionDto[] = [
   },
 ];
 let enrollment: EnrollmentSessionDto | null = null;
+let mockPin = "246802";
+let mockPassword = "Password1";
+let familyEnrollment: (EnrollmentSessionDto & { familyMemberId: string; positions: string[] }) | null = null;
 
 function refreshWallet(): void {
   wallet = { ...wallet, available_balance: balance.toFixed(2) };
@@ -44,9 +47,10 @@ function refreshWallet(): void {
 export const mockServices: AppServices = {
   mode: "mock",
   auth: {
-    async register() {
+    async register(payload) {
       await latency();
       signedIn = true;
+      mockPassword = payload.password;
       return { access_token: "simulated", refresh_token: "simulated", citizen_id: "mock-citizen", enrolment_status: "ENROLMENT_STARTED", next_step: "face_enrolment" };
     },
     async login(ic, password) {
@@ -57,6 +61,9 @@ export const mockServices: AppServices = {
     },
     async logout() { signedIn = false; await latency(80); },
     hasSession: () => signedIn,
+    async restoreSession() { return signedIn; },
+    // Offline demo mode has no trusted tier to authenticate against.
+    async getAccessToken() { return null; },
   },
   biometric: {
     async startEnrollment() {
@@ -75,7 +82,7 @@ export const mockServices: AppServices = {
       return { capture_status: "CAPTURE_READY", liveness_status: "PAD_LIVE", frame_index: positions.length, templates_accepted: positions.length, positions_complete: positions };
     },
     async completeEnrollment() { await latency(); },
-    async setPin(pin, pinConfirm) { await latency(); if (pin !== pinConfirm) throw new Error("The PIN confirmation does not match."); },
+    async setPin(pin, pinConfirm) { await latency(); if (pin !== pinConfirm) throw new Error("The PIN confirmation does not match."); mockPin = pin; },
     async activate() { await latency(); },
   },
   wallet: {
@@ -122,8 +129,81 @@ export const mockServices: AppServices = {
       member.wallet.owner_id = member.family_member_id; member.wallet.family_member_id = member.family_member_id;
       family = [...family, member]; return member;
     },
+    async startEnrollment(familyMemberId) {
+      await latency();
+      const member = family.find((item) => item.family_member_id === familyMemberId);
+      if (!member) throw new Error("Family Member not found.");
+      family = family.map((item) => item.family_member_id === familyMemberId ? {
+        ...item,
+        consent_status: "CONSENT_GRANTED",
+        enrolment_status: "ENROLMENT_STARTED",
+        profile_state: "pending_face",
+      } : item);
+      familyEnrollment = {
+        familyMemberId,
+        session_id: crypto.randomUUID(),
+        correlation_id: crypto.randomUUID(),
+        nonce: crypto.randomUUID(),
+        expires_at: new Date(Date.now() + 90_000).toISOString(),
+        enrolment_status: "ENROLMENT_STARTED",
+        positions: [],
+      };
+      return familyEnrollment;
+    },
+    async capturePosition(familyMemberId, session, pose) {
+      await latency();
+      if (!familyEnrollment || familyEnrollment.familyMemberId !== familyMemberId || familyEnrollment.session_id !== session.session_id) {
+        throw new Error("The Family Member enrolment session expired.");
+      }
+      familyEnrollment.positions = Array.from(new Set([...familyEnrollment.positions, pose]));
+      return {
+        capture_status: "CAPTURE_READY",
+        liveness_status: "PAD_LIVE",
+        frame_index: familyEnrollment.positions.length,
+        templates_accepted: familyEnrollment.positions.length,
+        positions_complete: [...familyEnrollment.positions],
+      };
+    },
+    async completeEnrollment(familyMemberId, sessionId) {
+      await latency();
+      if (!familyEnrollment || familyEnrollment.familyMemberId !== familyMemberId || familyEnrollment.session_id !== sessionId || familyEnrollment.positions.length < 3) {
+        throw new Error("Capture front, right, and left positions first.");
+      }
+      family = family.map((item) => item.family_member_id === familyMemberId ? {
+        ...item,
+        enrolment_status: "ENROLMENT_COMPLETED",
+        profile_state: "active",
+      } : item);
+      familyEnrollment = null;
+    },
   },
   profile: {
     async getProfile() { await latency(); return { citizen_display_name: "Aisyah Rahman", ic_number_masked: "******-**-5423", enrolment_status: "ENROLMENT_COMPLETED", account_status: "active" }; },
+    async changePassword(currentPassword, newPassword, newPasswordConfirm) {
+      await latency();
+      if (currentPassword !== mockPassword) throw new Error("The current password was not accepted. For this simulation, use Password1.");
+      if (newPassword !== newPasswordConfirm) throw new Error("The password confirmation does not match.");
+      mockPassword = newPassword;
+    },
+    async changePin(currentPin, newPin, newPinConfirm) {
+      await latency();
+      if (currentPin !== mockPin) throw new Error("The current PIN was not accepted. For this simulation, use 246802.");
+      if (newPin !== newPinConfirm) throw new Error("The PIN confirmation does not match.");
+      mockPin = newPin;
+    },
+    async startFaceReenrollment() {
+      await latency();
+      enrollment = {
+        session_id: crypto.randomUUID(), correlation_id: crypto.randomUUID(), nonce: crypto.randomUUID(),
+        expires_at: new Date(Date.now() + 15 * 60_000).toISOString(), enrolment_status: "ENROLMENT_STARTED",
+      };
+      return enrollment;
+    },
+    async completeFaceReenrollment(sessionId) {
+      await latency();
+      const positions = (enrollment as (EnrollmentSessionDto & { positions?: string[] }) | null)?.positions ?? [];
+      if (!enrollment || enrollment.session_id !== sessionId || positions.length < 3) throw new Error("Capture front, right, and left positions first.");
+      enrollment = null;
+    },
   },
 };

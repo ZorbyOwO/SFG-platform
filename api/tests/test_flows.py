@@ -78,6 +78,74 @@ def test_registration_login_enrolment_wallet_family_and_idempotency(api_client) 
     assert first_transfer.json()["family_balance"] == "20.00"
 
 
+def test_top_up_presets_custom_amount_and_bounds(api_client) -> None:
+    client: TestClient = api_client["client"]
+    account = register_and_activate(client)
+    headers = bearer(account["token"])
+
+    for index, amount in enumerate((20, 50, 100, 200, 500), start=1):
+        response = client.post("/wallet/topup", json={
+            "amount": amount,
+            "mock_source": "test",
+            "idempotency_key": f"topup-preset-{index:04d}",
+        }, headers=headers)
+        assert response.status_code == 200, response.text
+
+    custom = client.post("/wallet/topup", json={
+        "amount": "123.45",
+        "mock_source": "test",
+        "idempotency_key": "topup-custom-0001",
+    }, headers=headers)
+    assert custom.status_code == 200, custom.text
+    assert client.get("/wallet", headers=headers).json()["available_balance"] == "993.45"
+
+    for invalid_amount in ("0.99", "5000.01", "15.123"):
+        invalid = client.post("/wallet/topup", json={
+            "amount": invalid_amount,
+            "mock_source": "test",
+            "idempotency_key": f"topup-invalid-{invalid_amount}",
+        }, headers=headers)
+        assert invalid.status_code == 422
+        assert invalid.json()["error"] == "invalid_amount"
+
+
+def test_profile_pin_change_and_face_reenrolment_return_to_active(api_client) -> None:
+    client: TestClient = api_client["client"]
+    account = register_and_activate(client)
+    headers = bearer(account["token"])
+    replacement_pin = "482605"
+
+    wrong_change = client.post("/auth/pin/change", json={
+        "current_pin": account["wrong_pin"], "new_pin": replacement_pin, "new_pin_confirm": replacement_pin,
+    }, headers=headers)
+    assert wrong_change.status_code == 401
+
+    changed = client.post("/auth/pin/change", json={
+        "current_pin": account["pin"], "new_pin": replacement_pin, "new_pin_confirm": replacement_pin,
+    }, headers=headers)
+    assert changed.status_code == 200
+    assert changed.json()["pin_status"] == "PIN_ACCEPTED"
+
+    session_response = client.post("/profile/face-reenrol/session", json={}, headers=headers)
+    assert session_response.status_code == 200, session_response.text
+    session = session_response.json()
+    for pose in ("front", "right", "left"):
+        capture = client.post(
+            "/enrol/face",
+            data={"session_id": session["session_id"], "nonce": session["nonce"], "pose": pose},
+            files={"frame": ("simulation.jpg", b"not-a-face", "image/jpeg")},
+            headers={**headers, "X-SFG-Simulation": "success"},
+        )
+        assert capture.status_code == 200, capture.text
+
+    completed = client.post("/enrol/complete", json={"session_id": session["session_id"]}, headers=headers)
+    assert completed.status_code == 200, completed.text
+    assert completed.json()["next_step"] == "dashboard"
+    profile = client.get("/profile", headers=headers)
+    assert profile.json()["account_status"] == "active"
+    assert profile.json()["enrolment_status"] == "ENROLMENT_COMPLETED"
+
+
 @pytest.mark.parametrize("scenario,expected", [
     ("pad_uncertain", "PAD_UNCERTAIN"),
     ("pad_error", "PAD_ERROR"),
@@ -92,7 +160,7 @@ def test_negative_biometric_states_never_authorize(api_client, scenario: str, ex
     client.post("/wallet/topup", json={"amount": 100, "mock_source": "test", "idempotency_key": f"topup-{scenario}-0001"}, headers=bearer(account["token"]))
     session = open_payment(client, key)
     response = identify(client, key, session, scenario)
-    assert response.status_code in {403, 404, 409}
+    assert response.status_code in {403, 404, 409, 503}
     body = response.json()
     assert expected in body.values()
     assert body.get("authorization_status") != "AUTHORIZATION_GRANTED"

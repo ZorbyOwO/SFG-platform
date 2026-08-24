@@ -1,1 +1,45 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Confirm payment · SFG Kiosk</title><link rel="stylesheet" href="../shared/css/base.css"></head><body data-page="confirm"><div class="kiosk-shell"><header class="kiosk-header"><div class="kiosk-brand"><span>SFG</span><span>Sarawak Facial Gateway</span></div><div class="kiosk-status">PIN authorization</div></header><main class="kiosk-main"><h1>Confirm payment</h1><p>Check the masked identity and amount, then the main account holder enters their PIN.</p><form id="confirm-form" class="kiosk-card"><div class="identity-card"><strong id="identity">Matched customer</strong><span id="masked-ic">******-**-0000</span></div><label>Amount<input id="confirm-amount" readonly></label><label>Six-digit PIN<input id="pin" class="pin-input" type="password" inputmode="numeric" maxlength="6" autocomplete="off" required></label><button class="kiosk-button full">Authorize and charge</button><button id="cancel" type="button" class="kiosk-button secondary full" style="margin-top:10px">Cancel</button><div id="error" class="error" hidden></div></form></main><footer class="kiosk-footer">Face identifies. PIN authorizes. Both gates must pass in the same session.</footer></div><script type="module" src="js/kiosk.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Confirm payment · SFG Kiosk</title>
+  <link rel="stylesheet" href="../shared/css/base.css">
+  <link rel="stylesheet" href="css/kiosk.css">
+</head>
+<body data-page="confirm">
+  <div class="kiosk-shell">
+    <header class="kiosk-header">
+      <div class="kiosk-brand"><span>SFG</span><span>Sarawak Facial Gateway</span></div>
+      <div class="kiosk-status">Identity confirmation and PIN</div>
+    </header>
+    <main class="kiosk-main">
+      <h1>Is this you?</h1>
+      <p>Check the masked identity and amount. Confirm the proposed identity before entering the main account PIN.</p>
+      <div class="kiosk-card">
+        <div class="identity-card">
+          <strong id="identity">Matched customer</strong>
+          <span id="masked-ic">******-**-0000</span>
+        </div>
+        <label class="readonly-label">Amount<input id="confirm-amount" readonly></label>
+        <div id="identity-prompt">
+          <p class="confirmation-question">Are you the person shown above?</p>
+          <div class="confirmation-actions">
+            <button id="confirm-yes" type="button" class="kiosk-button">Yes, continue</button>
+            <button id="confirm-no" type="button" class="kiosk-button secondary">No, cancel</button>
+          </div>
+        </div>
+        <form id="confirm-form" hidden>
+          <p class="confirmed-note">Identity confirmed. Enter the six-digit PIN to authorize this charge.</p>
+          <label>Six-digit PIN<input id="pin" class="pin-input" type="password" inputmode="numeric" maxlength="6" autocomplete="off" required></label>
+          <button class="kiosk-button full">Authorize and charge</button>
+        </form>
+        <button id="cancel" type="button" class="kiosk-button secondary full action-gap">Cancel payment</button>
+        <div id="error" class="error" hidden></div>
+      </div>
+    </main>
+    <footer class="kiosk-footer">Face identifies. Your Yes and correct PIN authorize. Every gate must pass in the same session.</footer>
+  </div>
+  <script type="module" src="js/kiosk.js"></script>
+</body>
+</html>

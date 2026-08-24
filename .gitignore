@@ -16,6 +16,14 @@ web/.env.local
 api/.env
 api/.runtime/
 api/models/
+
+# Commit-pinned biometric model payloads. Acquired and hash-verified by
+# biometric/tools/acquire_biometric_models.py; redistribution review is pending,
+# so the binaries are never committed.
+biometric/internal/biometric-core/models/
+biometric/.paddleocr-models/
+biometric/.venv/
+biometric/.venv-ocr/
 __pycache__/
 *.py[cod]
 .pytest_cache/

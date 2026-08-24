@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import { AppShell } from "../components/AppShell";
@@ -9,14 +10,24 @@ import { Register } from "../routes/Register";
 import { TransactionDetails, Transactions } from "../routes/Transactions";
 import { Welcome } from "../routes/Welcome";
 
+const LandingPage = lazy(() => import("../landing/App"));
+
+function LandingRoute() {
+  return <Suspense fallback={<main className="app-loading">Loading Sarawak Facial Gateway…</main>}>
+    <LandingPage />
+  </Suspense>;
+}
+
 function ProtectedShell() {
-  const { authenticated } = useAuth();
+  const { authenticated, initializing } = useAuth();
+  if (initializing) return <main className="app-loading">Loading your account…</main>;
   return authenticated ? <AppShell /> : <Navigate to="/login" replace state={{ reason: "Sign in to continue." }} />;
 }
 
 export function App() {
   return <Routes>
-    <Route path="/" element={<Welcome />} />
+    <Route path="/" element={<LandingRoute />} />
+    <Route path="/platform" element={<Welcome />} />
     <Route path="/login" element={<Login />} />
     <Route path="/register/*" element={<Register />} />
     <Route element={<ProtectedShell />}>

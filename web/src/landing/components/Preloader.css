@@ -1,0 +1,25 @@
+.preloader {
+  position: fixed; inset: 0; z-index: 5000;
+  background: var(--paper);
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  display: grid; place-items: center;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+.preloader--hide { opacity: 0; visibility: hidden; }
+.preloader__mark { width: 84px; height: 84px; }
+.preloader__poly {
+  stroke-dasharray: 160;
+  stroke-dashoffset: 160;
+  animation: draw 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.preloader__dot { opacity: 0; animation: popin 0.4s 0.55s forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes popin { to { opacity: 1; } }
+.preloader__count {
+  position: absolute; bottom: 12vh;
+  font-family: var(--font-mono); font-size: 0.95rem; color: var(--ink-faint);
+  letter-spacing: 0.2em;
+}
+@media (prefers-reduced-motion: reduce) {
+  .preloader { display: none; }
+}

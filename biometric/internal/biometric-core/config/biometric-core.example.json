@@ -1,0 +1,6 @@
+{
+  "YUNET_MODEL_PATH": "biometric-core/models/face_detection_yunet_2023mar.onnx",
+  "SFACE_MODEL_PATH": "biometric-core/models/face_recognition_sface_2021dec.onnx",
+  "PAD_MODEL_DIR": "biometric-core/models/silent_face",
+  "SFACE_MATCH_THRESHOLD": 0.363
+}

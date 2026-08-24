@@ -1,0 +1,368 @@
+/* ============================================================
+   SFG design tokens
+
+   White ground, Sarawak flag accents. Every neutral used for text
+   is checked against white for WCAG AA: --ink 17:1, --ink-soft 8:1,
+   --ink-mute 7.9:1, --ink-faint 5.7:1, --red 5.9:1.
+   ============================================================ */
+
+/*
+  Vite does not guarantee that this file is injected before the CSS a component
+  imports for itself, so at equal specificity a component rule could lose to a
+  base rule purely on file order. Declaring the base in a layer removes the
+  ordering question entirely: unlayered component CSS always wins over it,
+  whatever order the sheets arrive in.
+*/
+@layer base;
+
+@layer base {
+  .landing-page {
+    /* surfaces */
+    --paper: #ffffff;
+    --paper-2: #f8f5f0;
+    --paper-3: #f2ece3;
+    --surface: #ffffff;
+    --ink-panel: #16130f;
+
+    /* type */
+    --ink: #1d1a16;
+    --ink-soft: #514b44;
+    --ink-mute: #575049;
+    --ink-faint: #6e6559;
+    --on-dark: #f3efe8;
+    --on-dark-soft: #c3bcb0;
+
+    /* brand */
+    --red: #c8102e;
+    --red-deep: #a00d25;
+    --red-wash: #fdf2f4;
+    --yellow: #f2c94c;
+    --orange: #e8722c;
+    --success: #16704a;
+
+    /* lines and lifts */
+    --line: rgba(29, 26, 22, 0.13);
+    --line-strong: rgba(29, 26, 22, 0.24);
+    --line-dark: rgba(243, 239, 232, 0.16);
+    --shadow-sm: 0 1px 2px rgba(29, 26, 22, 0.05), 0 6px 18px -14px rgba(29, 26, 22, 0.2);
+    --shadow-md: 0 2px 4px rgba(29, 26, 22, 0.05), 0 18px 40px -22px rgba(29, 26, 22, 0.32);
+    --shadow-cta: 0 10px 26px -12px rgba(200, 16, 46, 0.5);
+
+    /* type ramp, mobile first and safe at 320px */
+    --font-display: 'Archivo', system-ui, sans-serif;
+    --font-body: 'Archivo', system-ui, sans-serif;
+    --font-mono: 'Spline Sans Mono', ui-monospace, monospace;
+
+    --text-hero: clamp(2.05rem, 8.4vw, 5.2rem);
+    --text-display: clamp(1.6rem, 5vw, 3.1rem);
+    --text-title: clamp(1.15rem, 2.4vw, 1.6rem);
+    --text-body: clamp(1rem, 0.96rem + 0.3vw, 1.12rem);
+    --text-small: 0.9rem;
+    --text-micro: 0.72rem;
+
+    /* spacing */
+    --space-1: 0.5rem;
+    --space-2: 1rem;
+    --space-3: 1.5rem;
+    --space-4: clamp(2rem, 5vw, 3rem);
+    --space-5: clamp(3rem, 8vw, 5rem);
+    --space-6: clamp(4rem, 11vw, 8rem);
+
+    --radius-pill: 999px;
+    --radius-card: 18px;
+
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-swift: cubic-bezier(0.77, 0, 0.175, 1);
+
+    --nav-h: 60px;
+    --gutter: clamp(20px, 5vw, 80px);
+    --measure: 1200px;
+  }
+
+  @media (min-width: 768px) {
+    .landing-page {
+      --nav-h: 72px;
+    }
+  }
+
+  /* ============ Base ============ */
+
+  .landing-page,
+  .landing-page *,
+  .landing-page *::before,
+  .landing-page *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html:has(.landing-page) {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: auto;
+  }
+  html.lenis:has(.landing-page),
+  html.lenis:has(.landing-page) body {
+    height: auto;
+  }
+  .lenis.lenis-smooth:has(.landing-page) {
+    scroll-behavior: auto !important;
+  }
+
+  .landing-page {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    font-synthesis-weight: none;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+    min-height: 100svh;
+  }
+
+  .landing-page ::selection {
+    background: var(--yellow);
+    color: var(--ink);
+  }
+
+  .landing-page img,
+  .landing-page svg,
+  .landing-page canvas,
+  .landing-page video {
+    display: block;
+    max-width: 100%;
+  }
+
+  .landing-page button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .landing-page :where(a) {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .landing-page :focus-visible {
+    outline: 3px solid var(--red);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* On the dark panel the red outline is too close to the ground to see. */
+  .landing-page .panel-dark :focus-visible {
+    outline-color: var(--yellow);
+  }
+
+  .landing-page h1,
+  .landing-page h2,
+  .landing-page h3 {
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    font-weight: 800;
+    font-stretch: normal;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+  }
+
+  .landing-page p {
+    text-wrap: pretty;
+  }
+
+  /* ============ Layout ============ */
+
+  .landing-page .wrap {
+    width: 100%;
+    max-width: var(--measure);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .landing-page .section {
+    padding-block: var(--space-6);
+    position: relative;
+  }
+
+  .landing-page .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .landing-page .eyebrow::before {
+    content: '';
+    width: 30px;
+    height: 2px;
+    background: var(--red);
+    flex-shrink: 0;
+  }
+
+  .landing-page .sec-title {
+    font-size: var(--text-display);
+    text-transform: uppercase;
+    margin-top: var(--space-2);
+    max-width: 20ch;
+  }
+
+  .landing-page .sec-lede {
+    color: var(--ink-soft);
+    max-width: 58ch;
+    margin-top: var(--space-2);
+  }
+
+  /* ============ Buttons ============ */
+
+  .landing-page .btn {
+    --btn-bg: var(--red);
+    --btn-fg: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    border: 1.5px solid transparent;
+    border-radius: var(--radius-pill);
+    padding: 14px 24px;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    box-shadow: var(--shadow-cta);
+    transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out),
+      background 0.25s ease;
+    min-height: 48px;
+  }
+
+  @media (hover: hover) {
+    .landing-page .btn:hover {
+      background: var(--red-deep);
+      box-shadow: 0 16px 34px -14px rgba(160, 13, 37, 0.55);
+    }
+    .landing-page .btn:hover .arrow {
+      transform: translateX(4px);
+    }
+  }
+  .landing-page .btn:active {
+    transform: translateY(1px);
+  }
+
+  .landing-page .btn .arrow {
+    transition: transform 0.35s var(--ease-out);
+    display: inline-block;
+  }
+
+  .landing-page .btn--ghost {
+    --btn-bg: transparent;
+    --btn-fg: var(--ink);
+    box-shadow: none;
+    border-color: var(--line-strong);
+  }
+  @media (hover: hover) {
+    .landing-page .btn--ghost:hover {
+      background: var(--paper-2);
+      border-color: var(--ink-faint);
+      box-shadow: none;
+    }
+  }
+
+  .landing-page .btn--block {
+    width: 100%;
+  }
+
+  .landing-page .link-underline {
+    position: relative;
+    font-weight: 600;
+    padding-bottom: 3px;
+  }
+  .landing-page .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--red);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s var(--ease-out);
+  }
+  @media (hover: hover) {
+    .landing-page .link-underline:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+  }
+
+  /* ============ Cards ============ */
+
+  /*
+    One treatment for every information box on the page: same surface, same
+    lift on hover, same entrance. Sections only set their own padding and grid.
+  */
+  .landing-page .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out),
+      border-color 0.35s ease;
+  }
+  @media (hover: hover) {
+    .landing-page .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--line-strong);
+    }
+  }
+  .landing-page .card:focus-within {
+    border-color: var(--line-strong);
+  }
+
+  /* On the dark panel the card reads as a lighter pane, not a white tile. */
+  .landing-page .panel-dark .card {
+    background: rgba(243, 239, 232, 0.05);
+    border-color: var(--line-dark);
+    box-shadow: none;
+  }
+  @media (hover: hover) {
+    .landing-page .panel-dark .card:hover {
+      background: rgba(243, 239, 232, 0.09);
+      border-color: rgba(242, 201, 76, 0.45);
+      box-shadow: none;
+    }
+  }
+
+  /* ============ Reveal ============ */
+
+  .landing-page .rv {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  .landing-page.reduced .rv {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .landing-page *,
+    .landing-page *::before,
+    .landing-page *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    .landing-page .rv {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+}

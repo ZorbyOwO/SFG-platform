@@ -2,10 +2,56 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#c2410c" />
-    <meta name="description" content="Sarawak Facial Gateway citizen wallet prototype" />
-    <title>Sarawak Facial Gateway</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Sarawak Facial Gateway: your face opens the door, your PIN makes it certain</title>
+    <meta name="description" content="Sarawak Facial Gateway verifies identity at public service counters with a live face check and a personal PIN. No smartphone needed. Opt-in, encrypted, always your choice." />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="robots" content="index, follow" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sarawak Facial Gateway" />
+    <meta property="og:description" content="Your face opens the door. Your PIN makes it certain. An opt-in identity layer for inclusive public services in Sarawak." />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:url" content="https://sfg.example/" />
+    <meta property="og:site_name" content="Sarawak Facial Gateway" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Sarawak Facial Gateway" />
+    <meta name="twitter:description" content="Look. Tap your PIN. You're in. Opt-in face + PIN access for inclusive public services in Sarawak." />
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <link
+      rel="preload"
+      as="image"
+      href="/landing/hero/face-640.webp"
+      imagesrcset="/landing/hero/face-280.webp 280w, /landing/hero/face-360.webp 360w, /landing/hero/face-480.webp 480w, /landing/hero/face-640.webp 640w, /landing/hero/face-720.webp 720w, /landing/hero/face-900.webp 900w, /landing/hero/face-964.webp 964w"
+      imagesizes="(max-height: 560px) and (orientation: landscape) min(100vw - 56px, 240px), (max-width: 360px) min(100vw - 56px, 250px), (min-width: 900px) 460px, (min-width: 560px) min(100vw - 56px, 430px), min(100vw - 56px, 380px)"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;600;700;800;900&family=Spline+Sans+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Sarawak Facial Gateway",
+        "alternateName": "SFG",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Web, Kiosk",
+        "description": "An opt-in AI computer vision identity and access layer for inclusive public service delivery in Sarawak. Live face verification plus a personal PIN at assisted service counters.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "MYR" },
+        "publisher": {
+          "@type": "Organization",
+          "name": "The Rookies UTS",
+          "affiliation": "University of Technology Sarawak"
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

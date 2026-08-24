@@ -1,1 +1,28 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Face identification · SFG Kiosk</title><link rel="stylesheet" href="../shared/css/base.css"></head><body data-page="scan"><div class="kiosk-shell"><header class="kiosk-header"><div class="kiosk-brand"><span>SFG</span><span>Sarawak Facial Gateway</span></div><div class="kiosk-status" id="session-time">Session active</div></header><main class="kiosk-main"><p class="simulation">Development simulation: the backend discards the frame and returns a configured safe scenario. This is not real biometric verification.</p><h1>Look at the camera</h1><p>Keep one face inside the guide. The camera stops immediately after capture or cancellation.</p><div class="camera-box"><video id="camera" autoplay playsinline muted></video></div><button id="capture" class="kiosk-button full">Capture and identify</button><button id="cancel" class="kiosk-button secondary full" style="margin-top:10px">Cancel</button><div id="error" class="error" hidden></div></main><footer class="kiosk-footer">Raw camera frames are not persisted by the development backend.</footer></div><script type="module" src="js/kiosk.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Face identification · SFG Kiosk</title>
+  <link rel="stylesheet" href="../shared/css/base.css">
+  <link rel="stylesheet" href="css/kiosk.css">
+</head>
+<body data-page="scan">
+  <div class="kiosk-shell">
+    <header class="kiosk-header">
+      <div class="kiosk-brand"><span>SFG</span><span>Sarawak Facial Gateway</span></div>
+      <div class="kiosk-status" id="session-time">Session active</div>
+    </header>
+    <main class="kiosk-main">
+      <h1>Look at the camera</h1>
+      <p>Keep one live face inside the guide. Detection, passive liveness, and 1:N identification run in the trusted backend.</p>
+      <div class="camera-box"><video id="camera" autoplay playsinline muted></video></div>
+      <button id="capture" class="kiosk-button full">Capture and identify</button>
+      <button id="cancel" class="kiosk-button secondary full action-gap">Cancel</button>
+      <div id="error" class="error" hidden></div>
+    </main>
+    <footer class="kiosk-footer">The captured frame is transient: it is processed in memory and not stored.</footer>
+  </div>
+  <script type="module" src="js/kiosk.js"></script>
+</body>
+</html>

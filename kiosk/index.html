@@ -1,1 +1,30 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SFG Merchant Kiosk</title><link rel="stylesheet" href="../shared/css/base.css"></head><body data-page="setup"><div class="kiosk-shell"><header class="kiosk-header"><div class="kiosk-brand"><span>SFG</span><span>Sarawak Facial Gateway</span></div><div class="kiosk-status">Kiosk UTC · SFG-KIOSK-001</div></header><main class="kiosk-main"><p class="simulation">Development kiosk. The current backend biometric adapter simulates decisions and performs no real identity or payment processing.</p><h1>Merchant kiosk</h1><p>Load the local development credential for this browser session, then begin a simulated wallet payment.</p><form id="setup-form" class="kiosk-card"><label>Development kiosk key<input id="kiosk-key" type="password" autocomplete="off" required></label><button class="kiosk-button full">Continue to amount</button><div id="error" class="error" hidden></div></form></main><footer class="kiosk-footer">Never place the kiosk key in source, documentation, screenshots, chat, or Git.</footer></div><script type="module" src="js/kiosk.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SFG Merchant Kiosk</title>
+  <link rel="stylesheet" href="../shared/css/base.css">
+  <link rel="stylesheet" href="css/kiosk.css">
+</head>
+<body data-page="setup">
+  <div class="kiosk-shell">
+    <header class="kiosk-header">
+      <div class="kiosk-brand"><span>SFG</span><span>Sarawak Facial Gateway</span></div>
+      <div class="kiosk-status">Kiosk UTC · SFG-KIOSK-001</div>
+    </header>
+    <main class="kiosk-main">
+      <p class="poc-notice">POC kiosk: live face identification and Supabase wallet deduction are enabled when the trusted backend is configured. No bank or card settlement is connected.</p>
+      <h1>Merchant kiosk</h1>
+      <p>Load the local kiosk credential for this browser session, then begin a protected wallet payment.</p>
+      <form id="setup-form" class="kiosk-card">
+        <label>Development kiosk key<input id="kiosk-key" type="password" autocomplete="off" required></label>
+        <button class="kiosk-button full">Continue to amount</button>
+        <div id="error" class="error" hidden></div>
+      </form>
+    </main>
+    <footer class="kiosk-footer">Never place the kiosk key in source, documentation, screenshots, chat, or Git.</footer>
+  </div>
+  <script type="module" src="js/kiosk.js"></script>
+</body>
+</html>
